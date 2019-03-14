@@ -33,7 +33,7 @@ Rscript accents_v1.0.R \
 	-i [CNV segment file] \ 
 	-c [genomic chromosome arm coordinates] \ 
 	-m [minimum arm coverage] \
-	-n [exonic log2 ratios used to compute noise] [OPTIONAL] \
+	-e [exonic log2 ratios used to compute noise] [OPTIONAL] \
 	-k [logical specifying whether to remove noisy segments] [OPTIONAL] \
 	-o [file output prefix]
 ```
