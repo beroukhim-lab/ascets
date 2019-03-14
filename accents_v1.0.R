@@ -1,6 +1,6 @@
 ### LIAM FLINN SPURR ###
 ### MEYERSON LAB ###
-### LAST UPDATED: MARCH 7, 2019 ###
+### LAST UPDATED: MARCH 14, 2019 ###
 
 ### LOAD REQUIRED LIBRARIES
 suppressMessages(suppressWarnings(library(tidyverse)))
@@ -162,7 +162,7 @@ if(noise_supplied) {
     mutate(start = as.numeric(start), end = as.numeric(end))
   
   # calculate the noise in each segment in each sample
-  noise <- noise_by_sample(cna %>% filter(ID %in% noise$sample), noise)
+  noise <- noise_by_sample(cna %>% filter(ID %in% noise$sample), noise) %>% mutate(noise = as.numeric(noise))
   
   # determine the threshold at which we are confident that we can make an accurate call (one standard deviation above the mean)
   n <- mean(noise$noise[!is.infinite(noise$noise)], na.rm = T) + sd(noise$noise[!is.infinite(noise$noise)], na.rm = T)
@@ -196,6 +196,7 @@ if(noise_supplied) {
   # if no noise files are provided, use previously defined thresholds
   amp_thresh <- 0.2
   del_thresh <- -0.2
+  exceed_frac <- NA
 }
 
 # output histogram distribution of segment mean values for manual QC
