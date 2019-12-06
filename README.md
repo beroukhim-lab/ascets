@@ -29,11 +29,19 @@ Optional (recommended):
 
 ### Run
 ```bash
-Rscript accents_v1.0.R \
+Rscript accents_v1.2.R \
 	-i [CNV segment file] \ 
 	-c [genomic chromosome arm coordinates] \ 
 	-m [minimum arm coverage] \
 	-e [exonic log2 ratios used to compute noise] [OPTIONAL] \
-	-k [logical specifying whether to remove noisy segments] [OPTIONAL] \
+	-k [logical specifying whether to keep noisy segments] [OPTIONAL] \
 	-o [file output prefix]
 ```
+
+### Output files
+- Histogram of the alteration fraction of all arms in the input cohort (altfrac_hist.pdf)
+- Arm-level calls for each arm in each sample in the input (arm_level_calls.txt)
+- Weighted average segment mean values for each arm in each sample in the input (weighted_average_segmeans.txt)
+- Histogram of modeled noise in the segments in the input cohort (noise_hist.pdf)
+- Parameters used to make arm-level calls (params.txt)
+- Histogram of the segment means in the input cohort (segmean_hist.pdf)
