@@ -1,6 +1,6 @@
 ### LIAM FLINN SPURR ###
 ### MEYERSON LAB ###
-### LAST UPDATED: SEPTEMBER 25, 2019 ###
+### LAST UPDATED: FEBRUARY 12, 2020 ###
 
 ### LOAD REQUIRED LIBRARIES
 suppressMessages(suppressWarnings(library(tidyverse)))
@@ -32,11 +32,17 @@ handle_command_args <- function(args) {
   
   # check if optional noise file has been supplied
   noise_supplied <<- ifelse(length(arg_df$value[arg_df$flag == "-e"]) > 0, T, F)
+  threshold_supplied <<- ifelse(length(arg_df$value[arg_df$flag == "-t"]) > 0, T, F)
+  
   if(noise_supplied) {
     # if so load the noise file
     noise <<- as.data.frame(fread(arg_df$value[arg_df$flag == "-e"]))
     # check if the user has specified whether to keep noisy segments (by default noisy segments are excluded)
     keep_noisy <<- ifelse(length(arg_df$value[arg_df$flag == "-k"]) > 0, as.logical(arg_df$value[arg_df$flag == "-k"]), F)
+  }
+  
+  if(threshold_supplied) {
+    threshold <<- arg_df$value[arg_df$flag == "-t"]
   }
 }
 
@@ -199,6 +205,11 @@ if(noise_supplied) {
   amp_thresh <- n
   del_thresh <- -1 * n
   
+} else if(threshold_supplied) {
+  amp_thresh <- as.numeric(threshold)
+  del_thresh <- -1 * as.numeric(threshold)
+  exceed_frac <- NA
+  
 } else {
   # if no noise files are provided, use previously defined thresholds
   amp_thresh <- 0.2
@@ -272,7 +283,8 @@ garbage <- dev.off()
 # make final arm level calls
 cat("Making arm level calls...\n")
 calls <- make_all_calls(cna_cyto, upper_thresh, lower_thresh)
-calls_out <- calls %>% group_by(ID) %>% spread(ARM, CALL) %>% ungroup() # turn the output into a matrix
+calls <- calls %>% mutate(CALL = as.character(CALL)) %>% replace_na(list(CALL = "NA"))
+calls_out <- calls %>% group_by(ID) %>% spread(ARM, CALL, fill = "LOWCOV") %>% ungroup() # turn the output into a matrix
 
 # write output to a file
 cat("Writing output...\n")
