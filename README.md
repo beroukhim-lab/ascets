@@ -1,5 +1,5 @@
 # ACCENTS
-**A**rm and **C**hromosome **C**opy number **E**vent detection through **N**oise modeling in **T**argeted **S**equencing
+**A**rm and **C**hromosome **C**opy-number **E**vent detection through **N**oise modeling in **T**argeted **S**equencing
 
 This repository contains the code to run the ACCENTS arm and chromosome-level copy number events caller for targeted sequencing data.
 
@@ -17,11 +17,11 @@ Required:
 	- We supply an example file in the repository for hg19, but other coordinates can be supplied in the same format
 - Minimum arm coverage to make a call (range 0.0 - 1.0)
 	- We usually use 0.5
-	- Specify 0.0 to allow any coverage
+	- Specify 0.0 to allow any level of coverage
 - Output file prefix
 
 Optional (recommended):
-- log2 ratios that were used to build segments
+- Exonic log2 ratio measurements that were used to build copy-number segments
 	- We use exonic calls from RobustCNV
 	- If this is not supplied, a previously-defined segment mean threshold of +/- 0.2 will be used
 - Logical value specifying whether to remove noisy segments (T or F)
