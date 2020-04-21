@@ -35,6 +35,7 @@ Rscript accents_v1.2.R \
 	-m [minimum arm coverage] \
 	-e [exonic log2 ratios used to compute noise] [OPTIONAL] \
 	-k [logical specifying whether to keep noisy segments] [OPTIONAL] \
+	-t [absolute value of manual threshold for amplifications and deletions] \
 	-o [file output prefix]
 ```
 
