@@ -1,5 +1,5 @@
 # ACCENTS
-**A**rm and **C**hromosome **C**opy-number **E**vent detection through **N**oise modeling in **T**argeted **S**equencing
+**A**rm and **C**hromosome **C**opy-number **E**vent detection in **N**eoplastic **T**argeted **S**equencing
 
 This repository contains the code to run the ACCENTS arm and chromosome-level copy number events caller for targeted sequencing data.
 
