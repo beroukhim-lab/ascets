@@ -169,13 +169,17 @@ handle_command_args(commandArgs(trailingOnly = TRUE))
 if(noise_supplied) {
   #if(nrow(noise %>% filter(sample %in% cna$ID)) != 0) stop("Error: samples in noise file do not match seg file")
   cat("Computing data noise...\n")
+  
+  missing_from_noise <- length(unique((noise %>% filter(!(sample %in% cna$ID)))$sample))
+  if(missing_from_noise > 0) message(paste0(missing_from_noise, " samples in seg file missing from log2 copy ratio file."))
+  
   # split the interval column so it can be aligned with the segment file
   noise <- noise %>% separate(interval, into = c("chrom", "start", "end")) %>%
     mutate(start = as.numeric(start), end = as.numeric(end))
   
   # calculate the noise in each segment in each sample
-  noise <- noise_by_sample(cna %>% filter(ID %in% noise$sample), noise) %>% mutate(noise = as.numeric(as.character(noise)))
-  
+  noise <- noise_by_sample(cna %>% filter(ID %in% noise$sample), noise %>% filter(sample %in% cna$ID)) %>% mutate(noise = as.numeric(as.character(noise)))
+
   # determine the threshold at which we are confident that we can make an accurate call (one standard deviation above the mean)
   n <- mean(noise$noise[!is.infinite(noise$noise)], na.rm = T) + sd(noise$noise[!is.infinite(noise$noise)], na.rm = T)
   
@@ -247,11 +251,11 @@ cna_cyto <- cna_cyto %>%
                                         ifelse(end > loc.end & loc.start < start, (loc.end - start), NA)))))
 
 # save the weighted average segment mean for later output
-weight_ave <- cna_cyto %>% mutate(seg.mean.w = alt_len * seg.mean) %>%
+weight_ave <- suppressMessages(cna_cyto %>% mutate(seg.mean.w = alt_len * seg.mean) %>%
   group_by(ID, arm) %>% 
   summarize(weight.ave.segmean = round(sum(seg.mean.w) / sum(alt_len), 4)) %>% 
   ungroup() %>% 
-  spread(arm, weight.ave.segmean)
+  spread(arm, weight.ave.segmean))
 
 cna_cyto <- cna_cyto %>% 
   mutate(alt = ifelse(seg.mean <= del_thresh, "DEL", ifelse(seg.mean >= amp_thresh, "AMP", "NEUTRAL")), # only retain segments that meet the thresholds
