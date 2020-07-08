@@ -1,6 +1,10 @@
 ### LIAM FLINN SPURR ###
 ### MEYERSON LAB ###
-### LAST UPDATED: FEBRUARY 12, 2020 ###
+### LAST UPDATED: JULY 8, 2020 ###
+
+message("ACCENTS: Arm and Chromosome Copy-number Event detection in Neoplastic Targeted Sequencing")
+message("Author: Liam F. Spurr")
+message("Contact: liamf_spurr@dfci.harvard.edu")
 
 ### LOAD REQUIRED LIBRARIES
 suppressMessages(suppressWarnings(library(tidyverse)))
