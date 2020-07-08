@@ -14,7 +14,7 @@ Required:
 - CNV segmentation file (.seg)
 	- We use .seg files from RobustCNV in our pipeline
 - Chromosome arm genomic coordinates
-	- We supply an example file in the repository for hg19, but other coordinates can be supplied in the same format such as cytoband coordinates (also provided for hg19)
+	- We supply an example file in the repository for hg19 (original data from [bioMart](http://grch37.ensembl.org/biomart/martview/69a5479f5796c22ca786f81386e2d5e4)), but other coordinates can be supplied in the same format such as cytoband coordinates (also provided for hg19)
 - Minimum arm coverage to make a call (range 0.0 - 1.0)
 	- We usually use 0.5
 	- Specify 0.0 to allow any level of coverage
