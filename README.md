@@ -2,6 +2,7 @@
 **A**rm and **C**hromosome **C**opy-number **E**vent detection in **N**eoplastic **T**argeted **S**equencing
 
 _Author: Liam F. Spurr_
+
 _Contact: liamf_spurr@dfci.harvard.edu_
 
 This repository contains the code to run the ACCENTS arm and chromosome-level copy number events caller for targeted sequencing data. ACCENTS produces arm-level copy-number variant calls and arm-level weighted average log2 segment means from segmented copy number data.
