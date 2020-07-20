@@ -1,5 +1,5 @@
-# ACCENTS
-**A**rm and **C**hromosome **C**opy-number **E**vent detection in **N**eoplastic **T**argeted **S**equencing
+# ACETS
+**A**rm and **C**hromosome copy-number **E**vent detection in **T**argeted **S**equencing
 
 _Author: Liam F. Spurr_
 
@@ -7,7 +7,7 @@ _Contact: liamf_spurr@dfci.harvard.edu_
 
 This repository contains the code to run the ACCENTS arm and chromosome-level copy number events caller for targeted sequencing data. ACCENTS produces arm-level copy-number variant calls and arm-level weighted average log2 segment means from segmented copy number data.
 
-## How to run ACCENTS
+## How to run ACETS
 ### System requirements
 This code has been run on Mac and Linux using R version 3.4.0. The user must also install R packages "tidyverse" and
 "data.table" from CRAN prior to running the program.
@@ -38,7 +38,7 @@ Optional (recommended):
 
 ### Run the script (command-line)
 ```bash
-Rscript accents_v1.0.R \
+Rscript acets_v1.0.R \
 	-i [CNV segment file] \
 	-c [genomic chromosome arm coordinates (or other coordinates)] \
 	-m [minimum arm coverage] \
@@ -50,7 +50,7 @@ Rscript accents_v1.0.R \
 
 #### Sample command
 ```bash
-Rscript accents_v1.0.R -i seg_example.seg -c genomic_arm_coordinates_hg19.txt -m 0.5 -e l2cr_example.txt -k F -o sample_output
+Rscript acets_v1.0.R -i seg_example.seg -c genomic_arm_coordinates_hg19.txt -m 0.5 -e l2cr_example.txt -k F -o sample_output
 ```
 
 ### Output files
