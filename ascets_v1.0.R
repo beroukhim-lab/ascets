@@ -1,8 +1,8 @@
 ### ASCETS: Arm and chromosome-level Somatic Copy-number Event detection in Targeted Sequencing
 ### v1.0
 
-### Author: Liam Flinn Spurr
-### Contact: liamf_spurr@dfci.harvard.edu
+### Author: Liam Flinn Spurr, liamf_spurr@dfci.harvard.edu
+### Contact: Rameen Beroukhim, rameen_beroukhim@dfci.harvard.edu
 ### Date last updated: July 21, 2020
 
 ### License: Pending
@@ -12,8 +12,8 @@
 #######################################
 
 message("ASCETS: Arm and chromosome-level Somatic Copy-number Event detection in Targeted Sequencing")
-message("Author: Liam F. Spurr")
-message("Contact: liamf_spurr@dfci.harvard.edu")
+message("Author: Liam F. Spurr, liamf_spurr@dfci.harvard.edu")
+message("Contact: Rameen Beroukhim, rameen_beroukhim@dfci.harvard.edu")
 
 ### LOAD REQUIRED LIBRARIES
 suppressMessages(suppressWarnings(library(tidyverse)))
@@ -77,14 +77,14 @@ make_arm_call <- function(df, u, l) {
   # assign call based on alteration threshold
   if(max_alt_type == "NEUTRAL") {
     if(max_alt >= u) call <- max_alt_type
-    else call <- NA
+    else call <- "NC"
   } else {
     if (max_alt >= u) {  # check if the alteration fraction exceeds the threshold for a call
       call <- max_alt_type
     } else if (max_alt <= l) { # if not, see if it qualifies as a neutral arm
       call <- "NEUTRAL"
     } else {  # otherwise, cannot make a call
-      call <- NA
+      call <- "NC"
     }
   }
 
@@ -303,7 +303,7 @@ garbage <- dev.off()
 # make final arm level calls
 cat("Making arm level calls...\n")
 calls <- make_all_calls(cna_cyto, upper_thresh, lower_thresh)
-calls <- calls %>% mutate(CALL = as.character(CALL)) %>% replace_na(list(CALL = "NA"))
+calls <- calls %>% mutate(CALL = as.character(CALL)) %>% replace_na(list(CALL = "NC"))
 calls_out <- calls %>% group_by(ID) %>% spread(ARM, CALL, fill = "LOWCOV") %>% ungroup() # turn the output into a matrix
 
 # write output to a file
