@@ -1,9 +1,9 @@
 # ASCETS
 **A**rm and chromosome-level **S**omatic **C**opy-number **E**vent detection in **T**argeted **S**equencing
 
-_Author: Liam F. Spurr_
+_Author: Liam F. Spurr, liamf_spurr@dfci.harvard.edu_
 
-_Contact: liamf_spurr@dfci.harvard.edu_
+_Contact: Rameen Beroukhim, rameen_beroukhim@dfci.harvard.edu_
 
 This repository contains the code to run the ASCETS arm and chromosome-level copy number events caller for targeted sequencing data. ASCETS produces arm-level copy-number variant calls and arm-level weighted average log2 segment means from segmented copy number data.
 
