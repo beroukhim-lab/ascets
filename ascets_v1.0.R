@@ -1,9 +1,9 @@
-### ACCENTS: Arm and Chromosome Copy-number Event detection in Neoplastic Targeted Sequencing
+### ASCETS: Arm and chromosome-level Somatic Copy-number Event detection in Targeted Sequencing
 ### v1.0
 
 ### Author: Liam Flinn Spurr
 ### Contact: liamf_spurr@dfci.harvard.edu
-### Date last updated: July 14, 2020
+### Date last updated: July 21, 2020
 
 ### License: Pending
 ### Dependencies: R >= 3.4.0, Libraries: tidyverse, data.table
@@ -11,7 +11,7 @@
 
 #######################################
 
-message("ACCENTS: Arm and Chromosome Copy-number Event detection in Neoplastic Targeted Sequencing")
+message("ASCETS: Arm and chromosome-level Somatic Copy-number Event detection in Targeted Sequencing")
 message("Author: Liam F. Spurr")
 message("Contact: liamf_spurr@dfci.harvard.edu")
 
