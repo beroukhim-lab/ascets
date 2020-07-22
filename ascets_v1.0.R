@@ -60,10 +60,13 @@ handle_command_args <- function(args) {
   if(threshold_supplied) {
     threshold <<- arg_df$value[arg_df$flag == "-t"]
   }
+  
+  # set amount of arm that must be altered to make an arm-level call
+  alteration_threshold <<- ifelse(length(arg_df$value[arg_df$flag == "-a"]) > 0, as.numeric(arg_df$value[arg_df$flag == "-a"]), 0.7)
 }
 
 # makes the final alteration call for an arm
-make_arm_call <- function(df, u, l) {
+make_arm_call <- function(df, thresh) {
   df <- as.data.frame(df)
 
   # ensure data frame is not empty
@@ -76,13 +79,11 @@ make_arm_call <- function(df, u, l) {
 
   # assign call based on alteration threshold
   if(max_alt_type == "NEUTRAL") {
-    if(max_alt >= u) call <- max_alt_type
+    if(max_alt >= thresh) call <- max_alt_type
     else call <- "NC"
   } else {
-    if (max_alt >= u) {  # check if the alteration fraction exceeds the threshold for a call
+    if (max_alt >= thresh) {  # check if the alteration fraction exceeds the threshold for a call
       call <- max_alt_type
-    } else if (max_alt <= l) { # if not, see if it qualifies as a neutral arm
-      call <- "NEUTRAL"
     } else {  # otherwise, cannot make a call
       call <- "NC"
     }
@@ -135,9 +136,9 @@ correct_coverage <- function(df) {
 }
 
 # wrapper function to make all arm calls for every sample in a data frame
-make_all_calls <- function(df, u, l) {
+make_all_calls <- function(df, thresh) {
   df_sam <- split(df, df$ID) # split the input file by sample
-  df_sam <- lapply(df_sam, by_arm, make_arm_call, u, l) # make calls for each arm in each sample
+  df_sam <- lapply(df_sam, by_arm, make_arm_call, thresh) # make calls for each arm in each sample
   do.call("rbind", df_sam) # provide the result as a data frame
 }
 
@@ -183,7 +184,6 @@ handle_command_args(commandArgs(trailingOnly = TRUE))
 
 ### DETERMINE AMPLIFICATION AND DELETION THRESHOLDS
 if(noise_supplied) {
-  #if(nrow(noise %>% filter(sample %in% cna$ID)) != 0) stop("Error: samples in noise file do not match seg file")
   cat("Computing data noise...\n")
 
   missing_from_noise <- length(unique((noise %>% filter(!(sample %in% cna$ID)))$sample))
@@ -240,7 +240,7 @@ if(noise_supplied) {
 # output histogram distribution of segment mean values for manual QC
 cat("Outputting segment mean histogram...\n")
 pdf(paste0(prefix, "_segmean_hist.pdf"))
-hist(cna$seg.mean, breaks = 200)
+hist(cna$seg.mean, breaks = 200, main = "Histogram of LCRs")
 abline(v = amp_thresh, col = "red", lwd = 2)
 abline(v = del_thresh, col = "blue", lwd = 2)
 garbage <- dev.off()
@@ -274,7 +274,7 @@ weight_ave <- suppressMessages(cna_cyto %>% mutate(seg.mean.w = alt_len * seg.me
   spread(arm, weight.ave.segmean))
 
 cna_cyto <- cna_cyto %>%
-  mutate(alt = ifelse(seg.mean <= del_thresh, "DEL", ifelse(seg.mean >= amp_thresh, "AMP", "NEUTRAL")), # only retain segments that meet the thresholds
+  mutate(alt = ifelse(seg.mean <= del_thresh, "DEL", ifelse(seg.mean >= amp_thresh, "AMP", "NEUTRAL")),
          perc_chrom_cov = cyto_len_corr / cyto_len, # calculate how much of the chromosome was covered
          cov_pass = ifelse(perc_chrom_cov > min_cov, T, F)) %>%
   group_by(ID, arm, cyto_len_corr, alt) %>%
@@ -284,25 +284,10 @@ cna_cyto <- cna_cyto %>%
   select(ID, arm, alt, perc_chrom_cov, cov_pass, alt_frac) %>%
   distinct()
 
-# define alteration (upper) and neutral (lower) thresholds
-upper_thresh <- 0.7
-lower_thresh <- 0.3
-
-# output a histogram of alteration fractions for manual QC
-cat("Outputting alteration fraction histogram...\n")
-pdf(paste0(prefix, "_altfrac_hist.pdf"))
-hist(cna_cyto$alt_frac[cna_cyto$alt != "NEUTRAL"],
-     xlab = "Fraction of arm altered (stratified by amp/del)",
-     main = "Histogram of cohort-wide arm alterations")
-abline(v = lower_thresh, col = "#B24C63", lwd = 2)
-abline(v = upper_thresh, col = "#23CE6B", lwd = 2)
-garbage <- dev.off()
-###
-
 ### MAKE ARM LEVEL CALLS
 # make final arm level calls
 cat("Making arm level calls...\n")
-calls <- make_all_calls(cna_cyto, upper_thresh, lower_thresh)
+calls <- make_all_calls(cna_cyto, alteration_threshold)
 calls <- calls %>% mutate(CALL = as.character(CALL)) %>% replace_na(list(CALL = "NC"))
 calls_out <- calls %>% group_by(ID) %>% spread(ARM, CALL, fill = "LOWCOV") %>% ungroup() # turn the output into a matrix
 
@@ -314,10 +299,9 @@ write.table(weight_ave, paste0(prefix, "_arm_weighted_average_segmeans.txt"), qu
 # write algorithm parameters to a file
 f <- file(paste0(prefix, "_params.txt"))
 writeLines(c(prefix,
-             paste0("Amplification segment mean threshold: ", amp_thresh),
-             paste0("Deletion segment mean threshold: ", del_thresh),
-             paste0("Arm-level alteration call threshold: ", upper_thresh),
-             paste0("Neutral call threshold: ", lower_thresh),
+             paste0("Amplification LCR threshold: ", amp_thresh),
+             paste0("Deletion LCR threshold: ", del_thresh),
+             paste0("Arm-level alteration call threshold: ", alteration_threshold),
              paste0("Percent of segments exceeding noise threshold: ", exceed_frac, "%")), f)
 close(f)
 

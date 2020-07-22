@@ -27,11 +27,13 @@ Required:
 - Output file prefix
 
 Optional (recommended):
+- Arm level-alteration fraction threshold
+	- Defaults to 0.7
 - Exonic log2 ratio measurements that were used to build copy-number segments
 	- We use exonic calls from RobustCNV
 	- The following columns are required in this order (names can vary): sample, genomic interval, gene/exon (can be blank), log2ratio
 	- See sample data for an example file
-	- If this is not supplied, a previously-defined segment mean threshold of +/- 0.2 will be used
+	- If this is not supplied, a default segment mean threshold of +/- 0.2 will be used
 	- A user-defined threshold can also be supplied instead
 - Logical value specifying whether to remove noisy segments (T or F)
 	- Noisy segments will be treated as no coverage areas
@@ -42,6 +44,7 @@ Rscript ascets_v1.0.R \
 	-i [CNV segment file] \
 	-c [genomic chromosome arm coordinates (or other coordinates)] \
 	-m [minimum arm coverage] \
+	-a [arm alteration fraction threshold] [OPTIONAL] \
 	-e [exonic log2 ratios used to compute noise] [OPTIONAL] \
 	-k [logical specifying whether to keep noisy segments] [OPTIONAL] \
 	-t [manual log2 ratio threshold to determine amplifications and deletions] [OPTIONAL, will overwrite noise estimate] \
@@ -50,11 +53,10 @@ Rscript ascets_v1.0.R \
 
 #### Sample command
 ```bash
-Rscript ascets_v1.0.R -i seg_example.seg -c genomic_arm_coordinates_hg19.txt -m 0.5 -e l2cr_example.txt -k F -o sample_output
+Rscript ascets_v1.0.R -i seg_example.seg -c genomic_arm_coordinates_hg19.txt -m 0.5 -e l2cr_example.txt -k F -a 0.7 -o sample_output
 ```
 
 ### Output files
-- Histogram of the alteration fraction of all arms in the input cohort (altfrac_hist.pdf)
 - Arm-level calls for each arm in each sample in the input (arm_level_calls.txt)
 - Weighted average segment mean values for each arm in each sample in the input (weighted_average_segmeans.txt)
 - Histogram of modeled noise in the segments in the input cohort (noise_hist.pdf)

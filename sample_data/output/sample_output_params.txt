@@ -1,6 +1,5 @@
-sample_data/output/sample_output
-Amplification segment mean threshold: 0.166321001452024
-Deletion segment mean threshold: -0.166321001452024
+sample_output
+Amplification LCR threshold: 0.166321001452024
+Deletion LCR threshold: -0.166321001452024
 Arm-level alteration call threshold: 0.7
-Neutral call threshold: 0.3
 Percent of segments exceeding noise threshold: 2.32273838630807%
