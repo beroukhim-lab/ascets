@@ -29,7 +29,7 @@ Required:
 Optional (recommended):
 - Arm level-alteration fraction threshold
 	- Defaults to 0.7
-- Exonic log2 ratio measurements that were used to build copy-number segments
+- Individual log2 ratio copy ratios (LCRs) that were used to build copy-number segments
 	- We use exonic calls from RobustCNV
 	- The following columns are required in this order (names can vary): sample, genomic interval, gene/exon (can be blank), log2ratio
 	- See sample data for an example file
@@ -45,7 +45,7 @@ Rscript ascets_v1.0.R \
 	-c [genomic chromosome arm coordinates (or other coordinates)] \
 	-m [minimum arm coverage] \
 	-a [arm alteration fraction threshold] [OPTIONAL] \
-	-e [exonic log2 ratios used to compute noise] [OPTIONAL] \
+	-e [LCRs used to compute noise] [OPTIONAL] \
 	-k [logical specifying whether to keep noisy segments] [OPTIONAL] \
 	-t [manual log2 ratio threshold to determine amplifications and deletions] [OPTIONAL, will overwrite noise estimate] \
 	-o [file output prefix]
@@ -53,7 +53,7 @@ Rscript ascets_v1.0.R \
 
 #### Sample command
 ```bash
-Rscript ascets_v1.0.R -i seg_example.seg -c genomic_arm_coordinates_hg19.txt -m 0.5 -e l2cr_example.txt -k F -a 0.7 -o sample_output
+Rscript ascets_v1.0.R -i seg_example.seg -c genomic_arm_coordinates_hg19.txt -m 0.5 -e lcr_example.txt -k F -a 0.7 -o sample_output
 ```
 
 ### Output files
