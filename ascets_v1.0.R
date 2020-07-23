@@ -5,7 +5,7 @@
 ### Contact: Rameen Beroukhim, rameen_beroukhim@dfci.harvard.edu
 ### Date last updated: July 21, 2020
 
-### License: Pending
+### License: GNU GPL2, Copyright (C) 2020 Dana-Farber Cancer Institute
 ### Dependencies: R >= 3.4.0, Libraries: tidyverse, data.table
 ### See README for guide on how to run this package
 
@@ -14,6 +14,21 @@
 message("ASCETS: Arm and chromosome-level Somatic Copy-number Event detection in Targeted Sequencing")
 message("Author: Liam F. Spurr, liamf_spurr@dfci.harvard.edu")
 message("Contact: Rameen Beroukhim, rameen_beroukhim@dfci.harvard.edu")
+
+message("Copyright (C) 2020 Dana-Farber Cancer Institute")
+message("This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along
+with this program; if not, write to the Free Software Foundation, Inc.,
+51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.")
 
 ### LOAD REQUIRED LIBRARIES
 suppressMessages(suppressWarnings(library(tidyverse)))
