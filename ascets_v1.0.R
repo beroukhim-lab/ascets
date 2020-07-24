@@ -1,4 +1,4 @@
-### ASCETS: Arm and chromosome-level Somatic Copy-number Event detection in Targeted Sequencing
+### ASCETS: Arm-level Somatic Copy-number Event detection in Targeted Sequencing
 ### v1.0
 
 ### Author: Liam Flinn Spurr, liamf_spurr@dfci.harvard.edu
@@ -11,7 +11,7 @@
 
 #######################################
 
-message("ASCETS: Arm and chromosome-level Somatic Copy-number Event detection in Targeted Sequencing")
+message("ASCETS: Arm-level Somatic Copy-number Event detection in Targeted Sequencing")
 message("Author: Liam F. Spurr, liamf_spurr@dfci.harvard.edu")
 message("Contact: Rameen Beroukhim, rameen_beroukhim@dfci.harvard.edu")
 
