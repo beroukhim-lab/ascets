@@ -7,7 +7,7 @@ Author: Liam F. Spurr, liamf_spurr@dfci.harvard.edu
 
 Contact: Rameen Beroukhim, rameen_beroukhim@dfci.harvard.edu
 
-This repository contains the code to run the ASCETS arm and chromosome-level copy number events caller for targeted sequencing data. ASCETS produces arm-level copy-number variant calls and arm-level weighted average log2 segment means from segmented copy number data.
+This repository contains the code to run the ASCETS arm-level copy number events caller for targeted sequencing data. ASCETS produces arm-level copy-number variant calls and arm-level weighted average log2 segment means from segmented copy number data.
 
 ## How to run ASCETS
 ### System requirements
