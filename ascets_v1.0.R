@@ -1,4 +1,4 @@
-### ASCETS: Arm-level Somatic Copy-number Event detection in Targeted Sequencing
+### ASCETS: Arm-level Somatic Copy-number Events in Targeted Sequencing
 ### v1.0
 
 ### Author: Liam Flinn Spurr, liamf_spurr@dfci.harvard.edu
@@ -11,9 +11,9 @@
 
 #######################################
 
-message("ASCETS: Arm-level Somatic Copy-number Event detection in Targeted Sequencing")
+message("ASCETS: Arm-level Somatic Copy-number Events in Targeted Sequencing")
 message("Author: Liam F. Spurr, liamf_spurr@dfci.harvard.edu")
-message("Contact: Rameen Beroukhim, rameen_beroukhim@dfci.harvard.edu")
+message("Contact: Rameen Beroukhim, rameen_beroukhim@dfci.harvard.edu\n")
 
 message("Copyright (C) 2020 Dana-Farber Cancer Institute")
 message("This program is free software; you can redistribute it and/or modify
@@ -28,7 +28,7 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License along
 with this program; if not, write to the Free Software Foundation, Inc.,
-51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.")
+51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.\n")
 
 ### LOAD REQUIRED LIBRARIES
 suppressMessages(suppressWarnings(library(tidyverse)))
