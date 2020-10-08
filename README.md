@@ -37,7 +37,8 @@ Optional (recommended):
 	- See sample data for an example file
 	- If this is not supplied, a default segment mean threshold of +/- 0.2 will be used
 	- A user-defined threshold can also be supplied instead
-- Logical value specifying whether to remove noisy segments (T or F)
+- Logical value specifying whether to retain noisy segments (T or F)
+	- Defaults to F
 	- Noisy segments will be treated as no coverage areas
 
 ### Run the script (command-line)
