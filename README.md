@@ -11,7 +11,7 @@ This repository contains the code to run the ASCETS arm-level copy number events
 
 ## How to run ASCETS
 ### System requirements
-This code has been run on Mac and Linux using R version 3.4.0. The user must also install R packages [tidyverse](https://www.tidyverse.org/packages/) and
+This code has been tested on Mac and Linux using R version 3.6.1. The user must also install R packages [tidyverse](https://www.tidyverse.org/packages/) and
 [data.table](https://github.com/Rdatatable/data.table/wiki/Installation) from CRAN prior to running the program.
 
 ### Command line
