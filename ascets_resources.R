@@ -13,7 +13,7 @@
 #######################################
 
 message("ASCETS: Arm-level Somatic Copy-number Events in Targeted Sequencing")
-message("Author: Liam F. Spurr, liamf_spurr@dfci.harvard.edu")
+message("Author: Liam F. Spurr, liam.spurr@uchospitals.edu")
 message("Contact: Rameen Beroukhim, rameen_beroukhim@dfci.harvard.edu\n")
 
 message("Copyright (C) 2020 Dana-Farber Cancer Institute")
