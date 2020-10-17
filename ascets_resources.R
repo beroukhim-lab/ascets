@@ -51,7 +51,7 @@ handle_command_args <- function(args) {
   
   # load the remaining required files and parameters
   cytoband <<- as.data.frame(fread(arg_df$value[arg_df$flag == "-c"]))
-  min_cov <<- ifelse(length(arg_df$value[arg_df$flag == "-t"]) > 0, as.numeric(arg_df$value[arg_df$flag == "-t"]), 0.5)
+  min_boc <<- ifelse(length(arg_df$value[arg_df$flag == "-t"]) > 0, as.numeric(arg_df$value[arg_df$flag == "-t"]), 0.5)
   name <<- arg_df$value[arg_df$flag == "-o"]
   
   # check if optional noise file has been supplied
@@ -74,7 +74,7 @@ make_arm_call <- function(df, thresh) {
   # ensure data frame is not empty
   if(nrow(df) < 1) {return()}
   
-  # check to make sure arm passes provided coverage threshold
+  # check to make sure arm passes provided BOC threshold
   if(!df$cov_pass[1]) {return(data.frame(sample = as.character(df$sample[1]), ARM = as.character(df$arm[1]), CALL = "LOWCOV"))}
   
   call <- ""
@@ -99,27 +99,27 @@ make_arm_call <- function(df, thresh) {
   data.frame(sample = as.character(df$sample[1]), ARM = as.character(df$arm[1]), CALL = call)
 }
 
-# calculates the total area of missing coverage on a chromosome arm
+# calculates the total area outside the BOC on a chromosome arm
 get_missing_cov <- function(df) {
   df <- df %>% arrange(segment_start) # make sure SEG file is properly sorted
-  # set coverage counter variable
+  # set counter variable
   tot = 0
   
-  # check if any coverage is missing on the ends of the arm
+  # check BOC on the ends of the arm
   if((df[1,3] - df[1,9]) > 0) {tot = tot + (df[1,3] - df[1,9])} # calculate the length from the end of the arm to the first measured base
   if((df[1,10] - df[nrow(df),4]) > 0) {tot = tot + (df[1,10] - df[nrow(df),4])} # calculate the length from the last measured base to the end of the arm
   
-  # iterate through middle segments to identify missing coverage areas
+  # iterate through middle segments to identify areas outside BOC
   if(nrow(df) > 1) {
     for (i in 2:nrow(df)) {
-      diff = df[i,3] - df[i-1,4] # see if there is any missing coverage between consecutive segments
+      diff = df[i,3] - df[i-1,4] # check BOC between consecutive segments
       if (diff > 1) {
-        tot = tot + diff # add any missing coverage to the total
+        tot = tot + diff # add to the total BOC
       }
     }
   }
   
-  # return input data frame with length of missing coverage
+  # return input data frame with BOC
   df %>% mutate(missing_cov = tot)
 }
 
@@ -130,10 +130,10 @@ by_arm <- function(df, f, ...) {
   do.call("rbind", df_out) # provide the result as a data frame
 }
 
-# internal wrapper function to get all corrected coverage values for every segment in each sample in a data frame
-correct_coverage <- function(df) {
+# internal wrapper function to get all corrected BOC values for every segment in each sample in a data frame
+correct_for_boc <- function(df) {
   df_sam <- split(df, df$sample) # split the input file by sample
-  df_sam <- lapply(df_sam, by_arm, get_missing_cov) # perform the missing coverage by arm in each sample
+  df_sam <- lapply(df_sam, by_arm, get_missing_cov) # correct BOC by arm in each sample
   df_out <- do.call("rbind", df_sam) # provide the result as a data frame
   df_out %>% mutate(cyto_len_corr = cyto_len - missing_cov) # compute the corrected arm length
 }
@@ -203,7 +203,6 @@ determine_noise_threshold <- function(cna, noise, keep_noisy = F) {
   exceed_frac <- nrow(noisy) * 100 / nrow(cna)
   
   # remove the noisy segments from the segmentation file if specified
-  # these will now be treated as areas of missing coverage
   if(!keep_noisy) {
     noisy <- noisy %>% mutate(seg_id = paste0(sample, "_", chrom, ":", segment_start, ":", segment_end))
     cna <- cna %>% mutate(seg_id = paste0(sample, "_", chrom, ":", segment_start, ":", segment_end)) %>%
@@ -249,11 +248,11 @@ compute_weighted_averages <- function(cna) {
 }
 
 # internal function to compute arm alteration fractions
-compute_alt_fractions <- function(cna, amp_thresh, del_thresh, min_cov) {
+compute_alt_fractions <- function(cna, amp_thresh, del_thresh, min_boc) {
   cna %>%
     mutate(alt = ifelse(log2ratio <= del_thresh, "DEL", ifelse(log2ratio >= amp_thresh, "AMP", "NEUTRAL")),
            perc_chrom_cov = cyto_len_corr / cyto_len, # calculate how much of the chromosome was covered
-           cov_pass = ifelse(perc_chrom_cov > min_cov, T, F)) %>%
+           cov_pass = ifelse(perc_chrom_cov > min_boc, T, F)) %>%
     group_by(sample, arm, cyto_len_corr, alt) %>%
     mutate(alt_len_sum = sum(alt_len)) %>% # get how much of each arm is amplified and deleted
     ungroup() %>%
@@ -270,7 +269,7 @@ compute_alt_fractions <- function(cna, amp_thresh, del_thresh, min_cov) {
 #   - See sample data on Github for an example file
 # - Chromosome arm genomic coordinates (*cytoband* argument supplied as a data frame)
 #   - See sample data on Github for an example file
-# - Minimum arm coverage to make a call (range 0.0 - 1.0; *min_cov* argument supplied as a numeric value) 
+# - Minimum arm BOC to make a call (range 0.0 - 1.0; *min_boc* argument supplied as a numeric value) 
 #   - Optional, defaults to 0.5
 # - Output file prefix (*name* argument supplied as a character string)
 # - Individual log2 ratio copy ratios (LCRs) that were used to build copy-number segments (*noise* argument supplied as a data frame)
@@ -294,7 +293,7 @@ compute_alt_fractions <- function(cna, amp_thresh, del_thresh, min_cov) {
 # - cna: data frame containing segmented CNA data that was supplied to the function
 # - noise: data frame containing noise data that was supplied to the function
 
-ascets <- function(cna, cytoband, min_cov = 0.5, name, noise, keep_noisy = F, threshold = 0.2, alteration_threshold = 0.7) {
+ascets <- function(cna, cytoband, min_boc = 0.5, name, noise, keep_noisy = F, threshold = 0.2, alteration_threshold = 0.7) {
   
   # enforce names and data classes for seg file
   names(cna) <- c("sample", "chrom", "segment_start", "segment_end", "num_mark", "log2ratio")
@@ -320,9 +319,9 @@ ascets <- function(cna, cytoband, min_cov = 0.5, name, noise, keep_noisy = F, th
   # align segments to cytobands
   cna_output <- annotate_cytobands(cna, cytoband)
   
-  # run coverage correction
-  cat("Determining regions of missing coverage...\n")
-  cna_output <- correct_coverage(cna_output)
+  # run BOC correction
+  cat("Determining breadth of coverage...\n")
+  cna_output <- correct_for_boc(cna_output)
   
   # crop segments to fit provided cytobands
   cat("Cropping segments...\n")
@@ -334,7 +333,7 @@ ascets <- function(cna, cytoband, min_cov = 0.5, name, noise, keep_noisy = F, th
   
   # compute arm alteration fractions
   cat("Computing alteration fractions...\n")
-  cna_output <- compute_alt_fractions(cna_output, amp_thresh, del_thresh, min_cov)
+  cna_output <- compute_alt_fractions(cna_output, amp_thresh, del_thresh, min_boc)
   
   # make final arm level calls
   cat("Making arm level calls...\n")

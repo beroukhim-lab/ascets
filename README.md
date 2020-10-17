@@ -27,9 +27,9 @@ Required:
 	- See sample data for an example file
 - Chromosome arm genomic coordinates
 	- We supply an example file in the repository for hg19 (original data from [bioMart](http://grch37.ensembl.org/biomart/martview/69a5479f5796c22ca786f81386e2d5e4)), but other coordinates can be supplied in the same format such as cytoband coordinates (also provided for hg19)
-- Minimum arm coverage to make a call (range 0.0 - 1.0)
+- Minimum arm breadth of coverage (BOC) to make a call (range 0.0 - 1.0)
 	- Optional, defaults to 0.5
-	- Specify 0.0 to allow any level of coverage
+	- Specify 0.0 to allow any BOC
 - Output file prefix
 
 Optional (recommended):
@@ -49,7 +49,7 @@ Optional (recommended):
 Rscript run_ascets.R \
 	-i [CNV segment file] \
 	-c [genomic chromosome arm coordinates (or other coordinates)] \
-	-m [minimum arm coverage] \
+	-m [minimum arm BOC] \
 	-a [arm alteration fraction threshold] [OPTIONAL] \
 	-e [LCRs used to compute noise] [OPTIONAL] \
 	-k [logical specifying whether to keep noisy segments] [OPTIONAL] \
@@ -81,9 +81,9 @@ ASCETS can also be run from within R Studio through calling the *ascets()* funct
 	- See sample data for an example file
 - Chromosome arm genomic coordinates (*cytoband* argument supplied as a data frame)
 	- We supply an example file in the repository for hg19 (original data from [bioMart](http://grch37.ensembl.org/biomart/martview/69a5479f5796c22ca786f81386e2d5e4)), but other coordinates can be supplied in the same format such as cytoband coordinates (also provided for hg19)
-- Minimum arm coverage to make a call (range 0.0 - 1.0; *min_cov* argument supplied as a numeric value) 
+- Minimum arm breadth of coverage (BOC) to make a call (range 0.0 - 1.0; *min_cov* argument supplied as a numeric value) 
 	- Optional, defaults to 0.5
-	- Specify 0.0 to allow any level of coverage
+	- Specify 0.0 to allow any BOC
 - Output file prefix (*name* argument supplied as a character string)
 - Individual log2 ratio copy ratios (LCRs) that were used to build copy-number segments (*noise* argument supplied as a data frame)
 	- The following columns are required in this order (names can vary): sample, genomic interval, gene/exon (can be blank), log2ratio

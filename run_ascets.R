@@ -42,5 +42,5 @@ source("./ascets_resources.R")
 
 cat("Parsing data...\n")
 handle_command_args(commandArgs(trailingOnly = TRUE))
-ascets_output <- ascets(cna, cytoband, min_cov, name, noise, keep_noisy, threshold, alteration_threshold)
+ascets_output <- ascets(cna, cytoband, min_boc, name, noise, keep_noisy, threshold, alteration_threshold)
 write_outputs_to_file(ascets_output)
