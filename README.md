@@ -45,6 +45,8 @@ Optional (recommended):
 	- Defaults to F
 
 #### Run the script
+
+Note: must be run from the same directory as the *run_ascets.R* and *ascets_resources.R* files
 ```bash
 Rscript run_ascets.R \
 	-i [CNV segment file] \
