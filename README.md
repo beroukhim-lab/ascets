@@ -26,7 +26,7 @@ Required:
 	- The following columns are required in this order (names can vary): sample, chromosome, segment start, segment end, number of markers, log2ratio
 	- See sample data for an example file
 - Chromosome arm genomic coordinates
-	- We supply an example file in the repository for hg19 (original data from [bioMart](http://grch37.ensembl.org/biomart/martview/69a5479f5796c22ca786f81386e2d5e4)), but other coordinates can be supplied in the same format such as cytoband coordinates (also provided for hg19)
+	- We supply an example file in the repository for hg19 (original data from [UCSC](http://hgdownload.cse.ucsc.edu/goldenPath/hg19/database/cytoBand.txt.gz)), but other coordinates can be supplied in the same format such as cytoband coordinates (also provided for hg19)
 - Minimum arm breadth of coverage (BOC) to make a call (range 0.0 - 1.0)
 	- Optional, defaults to 0.5
 	- Specify 0.0 to allow any BOC
