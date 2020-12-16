@@ -293,7 +293,7 @@ compute_alt_fractions <- function(cna, amp_thresh, del_thresh, min_boc) {
 # - cna: data frame containing segmented CNA data that was supplied to the function
 # - noise: data frame containing noise data that was supplied to the function
 
-ascets <- function(cna, cytoband, min_boc = 0.5, name, noise, keep_noisy = F, threshold = 0.2, alteration_threshold = 0.7) {
+ascets <- function(cna, cytoband, min_boc = 0.5, name, noise = data.frame(), keep_noisy = F, threshold = 0.2, alteration_threshold = 0.7) {
   
   # enforce names and data classes for seg file
   names(cna) <- c("sample", "chrom", "segment_start", "segment_end", "num_mark", "log2ratio")
