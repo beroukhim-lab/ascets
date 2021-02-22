@@ -7,6 +7,8 @@ Author: Liam F. Spurr, liam.spurr@uchospitals.edu
 
 Contact: Rameen Beroukhim, rameen_beroukhim@dfci.harvard.edu
 
+_Please cite: Spurr LF, Touat M, Taylor AM, et al. Quantification of aneuploidy in targeted sequencing data using ASCETS, Bioinformatics (2020), https://doi.org/10.1093/bioinformatics/btaa980._
+
 This repository contains the code to run the ASCETS arm-level copy number events caller for targeted sequencing data. ASCETS produces arm-level copy-number variant calls and arm-level weighted average log2 segment means from segmented copy number data.
 
 ## How to run ASCETS
