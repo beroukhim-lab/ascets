@@ -262,6 +262,13 @@ compute_alt_fractions <- function(cna, amp_thresh, del_thresh, min_boc) {
     distinct()
 }
 
+calc_aneu_scores <- function(calls) {
+  calls %>% gather(arm, call, -sample) %>%
+    group_by(sample) %>%
+    summarize(aneuploidy_score = length(call[call %in% c("AMP", "DEL")]) / 
+                length(call[call != "LOWCOV"]))
+}
+
 # main function to run the ASCETS algorithm
 
 # INPUT
@@ -340,7 +347,12 @@ ascets <- function(cna, cytoband, min_boc = 0.5, name, noise = data.frame(), kee
   cat("Making arm level calls...\n")
   calls <- make_all_calls(cna_output, alteration_threshold)
   
+  # calculate aneuploidy scores
+  cat("Calculating aneuploidy scores...\n")
+  aneu_scores <- calc_aneu_scores(calls)
+  
   list(calls = calls, 
+       aneu_scores = aneu_scores,
        weight_ave = weight_ave, 
        amp_thresh = amp_thresh, 
        del_thresh = del_thresh, 
@@ -376,6 +388,7 @@ write_outputs_to_file <- function(ascets, location = "./") {
   cat("Writing final outputs...\n")
   write.table(ascets$calls, paste0(location, ascets$name, "_arm_level_calls.txt"), quote = F, row.names = F, sep = "\t")
   write.table(ascets$weight_ave, paste0(location, ascets$name, "_arm_weighted_average_segmeans.txt"), quote = F, row.names = F, sep = "\t")
+  write.table(ascets$aneu_scores, paste0(location, ascets$name, "_aneuploidy_scores.txt"), quote = F, row.names = F, sep = "\t")
   
   f <- file(paste0(location, ascets$name, "_params.txt"))
   writeLines(c(ascets$name,

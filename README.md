@@ -69,6 +69,7 @@ Rscript run_ascets.R -i seg_example.seg -c genomic_arm_coordinates_hg19.txt -m 0
 #### Output files
 - Arm-level calls for each arm in each sample in the input (arm_level_calls.txt)
 - Weighted average segment mean values for each arm in each sample in the input (weighted_average_segmeans.txt)
+- Aneuploidy scores (range 0-1, fraction of arms amplified or deleted out of total called arms [call ≠ LOWCOV])
 - Histogram of modeled noise in the segments in the input cohort (noise_hist.pdf)
 - Parameters used to make arm-level calls (params.txt)
 - Histogram of the segment means in the input cohort (segmean_hist.pdf)
@@ -84,7 +85,7 @@ ASCETS can also be run from within R Studio through calling the *ascets()* funct
 	- The following columns are required in this order (names can vary): sample, chromosome, segment start, segment end, number of markers, log2ratio
 	- See sample data for an example file
 - Chromosome arm genomic coordinates (*cytoband* argument supplied as a data frame)
-	- We supply an example file in the repository for hg19 (original data from [bioMart](http://grch37.ensembl.org/biomart/martview/69a5479f5796c22ca786f81386e2d5e4)), but other coordinates can be supplied in the same format such as cytoband coordinates (also provided for hg19)
+	- We supply a example files in the repository for hg19/38 (original data from [bioMart](http://grch37.ensembl.org/biomart/martview/69a5479f5796c22ca786f81386e2d5e4)), but other coordinates can be supplied in the same format such as cytoband coordinates (also provided for hg19)
 - Minimum arm breadth of coverage (BOC) to make a call (range 0.0 - 1.0; *min_cov* argument supplied as a numeric value) 
 	- Optional, defaults to 0.5
 	- Specify 0.0 to allow any BOC
@@ -103,7 +104,8 @@ ASCETS can also be run from within R Studio through calling the *ascets()* funct
 
 A list containing:
 - *calls*: data frame containing aSCNA calls
-- *weight_ave*: data frame arm weighted average segment means
+- *weight_ave*: data frame containing arm weighted average segment means
+- *aneu_scores*: data frame containing aneuploidy scores for each sample
 - *amp_thresh*: numeric value representing amplification threshold that was used to make aSCNA calls
 - *del_thresh*: numeric value representing deletion threshold that was used to make aSCNA calls
 - *alteration_thresh*: numeric value representing fraction of arm that must be altered to call an aSCNA
