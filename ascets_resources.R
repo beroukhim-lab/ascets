@@ -63,6 +63,7 @@ handle_command_args <- function(args) {
   if(length(arg_df$value[arg_df$flag == "-e"]) > 0) noise <<- as.data.frame(fread(arg_df$value[arg_df$flag == "-e"]))
   else noise <<- data.frame()
   
+  
   # set amount of arm that must be altered to make an arm-level call
   alteration_threshold <<- ifelse(length(arg_df$value[arg_df$flag == "-a"]) > 0, as.numeric(arg_df$value[arg_df$flag == "-a"]), 0.7)
 }

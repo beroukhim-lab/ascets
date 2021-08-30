@@ -17,9 +17,21 @@ suppressMessages(suppressWarnings(library(tidyverse)))
 suppressMessages(suppressWarnings(library(data.table)))
 ###
 
+getCurrentFileLocation <-  function() {
+  this_file <- commandArgs() %>% 
+    tibble::enframe(name = NULL) %>%
+    tidyr::separate(col=value, into=c("key", "value"), sep="=", fill='right') %>%
+    dplyr::filter(key == "--file") %>%
+    dplyr::pull(value)
+  if (length(this_file) ==0) {
+    this_file <- rstudioapi::getSourceEditorContext()$path
+  }
+  return(dirname(this_file))
+}
+
 ### LOAD INPUT FILES
 cat("Loading required functions...\n")
-source("./ascets_resources.R")
+source(paste0(getCurrentFileLocation(), "/ascets_resources.R"))
 
 cat("Parsing data...\n")
 handle_command_args(commandArgs(trailingOnly = TRUE))
