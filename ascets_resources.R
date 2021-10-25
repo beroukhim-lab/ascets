@@ -81,7 +81,7 @@ make_arm_call <- function(df, thresh) {
   call <- ""
   
   # determine which alteration type is most prevalent in the arm
-  max_alt <- max(df$alt_frac)
+  max_alt <- max(df$alt_frac, na.rm = T)
   max_alt_type <- df[df$alt_frac == max_alt,]$alt
   
   # assign call based on alteration threshold

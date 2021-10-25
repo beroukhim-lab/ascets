@@ -53,7 +53,7 @@ Note: must be run from the same directory as the *run_ascets.R* and *ascets_reso
 Rscript run_ascets.R \
 	-i [CNV segment file] \
 	-c [genomic chromosome arm coordinates (or other coordinates)] \
-	-m [minimum arm BOC] \
+	-m [minimum arm BOC] [OPTIONAL] \
 	-a [arm alteration fraction threshold] [OPTIONAL] \
 	-e [LCRs used to compute noise] [OPTIONAL] \
 	-k [logical specifying whether to keep noisy segments] [OPTIONAL] \
