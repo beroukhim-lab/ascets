@@ -207,7 +207,7 @@ determine_noise_threshold <- function(cna, noise, keep_noisy = F) {
   if(!keep_noisy) {
     noisy <- noisy %>% mutate(seg_id = paste0(sample, "_", chrom, ":", segment_start, ":", segment_end))
     cna <- cna %>% mutate(seg_id = paste0(sample, "_", chrom, ":", segment_start, ":", segment_end)) %>%
-      filter(!(seg_id %in% noisy$seg_id)) %>% select(-seg_id)
+      filter(!(seg_id %in% noisy$seg_id)) %>% dplyr::select(-seg_id)
   }
   
   # set the amplification and deletion thresholds
@@ -258,7 +258,7 @@ compute_alt_fractions <- function(cna, amp_thresh, del_thresh, min_boc) {
     mutate(alt_len_sum = sum(alt_len)) %>% # get how much of each arm is amplified and deleted
     ungroup() %>%
     mutate(alt_frac = alt_len_sum / cyto_len_corr) %>%  # calculate the fraction
-    select(sample, arm, alt, perc_chrom_cov, cov_pass, alt_frac) %>%
+    dplyr::select(sample, arm, alt, perc_chrom_cov, cov_pass, alt_frac) %>%
     distinct()
 }
 
