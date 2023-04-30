@@ -105,11 +105,10 @@ get_missing_cov <- function(df) {
   df <- df %>% arrange(segment_start) # make sure SEG file is properly sorted
   # set counter variable
   tot = 0
-  
+
   # check BOC on the ends of the arm
   if((df[1,3] - df[1,9]) > 0) {tot = tot + (df[1,3] - df[1,9])} # calculate the length from the end of the arm to the first measured base
   if((df[1,10] - df[nrow(df),4]) > 0) {tot = tot + (df[1,10] - df[nrow(df),4])} # calculate the length from the last measured base to the end of the arm
-  
   # iterate through middle segments to identify areas outside BOC
   if(nrow(df) > 1) {
     for (i in 2:nrow(df)) {
@@ -121,7 +120,7 @@ get_missing_cov <- function(df) {
   }
   
   # return input data frame with BOC
-  df %>% mutate(missing_cov = tot)
+  df %>% mutate(missing_cov = as.numeric(tot))
 }
 
 # general internal function to perform the specified function by chromsome arm for a sample
@@ -136,6 +135,7 @@ correct_for_boc <- function(df) {
   df_sam <- split(df, df$sample) # split the input file by sample
   df_sam <- lapply(df_sam, by_arm, get_missing_cov) # correct BOC by arm in each sample
   df_out <- do.call("rbind", df_sam) # provide the result as a data frame
+  print(df_out)
   df_out %>% mutate(cyto_len_corr = cyto_len - missing_cov) # compute the corrected arm length
 }
 
