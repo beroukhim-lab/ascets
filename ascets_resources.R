@@ -135,7 +135,6 @@ correct_for_boc <- function(df) {
   df_sam <- split(df, df$sample) # split the input file by sample
   df_sam <- lapply(df_sam, by_arm, get_missing_cov) # correct BOC by arm in each sample
   df_out <- do.call("rbind", df_sam) # provide the result as a data frame
-  print(df_out)
   df_out %>% mutate(cyto_len_corr = cyto_len - missing_cov) # compute the corrected arm length
 }
 
