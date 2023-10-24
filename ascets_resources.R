@@ -222,7 +222,9 @@ determine_noise_threshold <- function(cna, noise, keep_noisy = F) {
 
 # internal function to annotate segments with supplied cytobands
 annotate_cytobands <- function(cna, cytoband) {
-  left_join(cna, cytoband, by = "chrom") %>% ungroup() %>% filter(segment_start < end & (segment_start > start | segment_end > start)) %>%
+  left_join(cna, cytoband, by = "chrom", relationship = "many-to-many") %>% 
+  ungroup() %>% 
+  filter(segment_start < end & (segment_start > start | segment_end > start)) %>%
     mutate(start = as.numeric(start), end = as.numeric(end),
            segment_start = as.numeric(segment_start), segment_end = as.numeric(segment_end),
            cyto_len = end - start) %>%
