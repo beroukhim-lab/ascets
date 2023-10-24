@@ -51,7 +51,7 @@ handle_command_args <- function(args) {
   
   # load the remaining required files and parameters
   cytoband <<- as.data.frame(fread(arg_df$value[arg_df$flag == "-c"]))
-  min_boc <<- ifelse(length(arg_df$value[arg_df$flag == "-t"]) > 0, as.numeric(arg_df$value[arg_df$flag == "-t"]), 0.5)
+  min_boc <<- ifelse(length(arg_df$value[arg_df$flag == "-m"]) > 0, as.numeric(arg_df$value[arg_df$flag == "-m"]), 0.5)
   name <<- arg_df$value[arg_df$flag == "-o"]
   
   # check if optional noise file has been supplied
