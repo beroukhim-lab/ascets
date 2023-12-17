@@ -1,10 +1,10 @@
 ### ASCETS: Arm-level Somatic Copy-number Events in Targeted Sequencing
-### v1.0
+### v1.2
 ### ascets_resources.R
 
-### Author: Liam F. Spurr, liam.spurr@uchospitals.edu
+### Author: Liam F. Spurr, liam.spurr@uchicagomedicine.org
 ### Contact: Rameen Beroukhim, rameen_beroukhim@dfci.harvard.edu
-### Date last updated: October 15, 2020
+### Date last updated: December 16, 2023
 
 ### License: GNU GPL2, Copyright (C) 2020 Dana-Farber Cancer Institute
 ### Dependencies: R >= 3.4.0, Libraries: tidyverse, data.table
@@ -13,7 +13,7 @@
 #######################################
 
 message("ASCETS: Arm-level Somatic Copy-number Events in Targeted Sequencing")
-message("Author: Liam F. Spurr, liam.spurr@uchospitals.edu")
+message("Author: Liam F. Spurr, liam.spurr@uchicagomedicine.org")
 message("Contact: Rameen Beroukhim, rameen_beroukhim@dfci.harvard.edu\n")
 
 message("Copyright (C) 2020 Dana-Farber Cancer Institute")
@@ -34,6 +34,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 ###  REQUIRED LIBRARIES
 suppressMessages(suppressWarnings(library(tidyverse)))
 suppressMessages(suppressWarnings(library(data.table)))
+suppressMessages(suppressWarnings(library(parallel)))
 
 ### FUNCTIONS
 
@@ -126,14 +127,14 @@ get_missing_cov <- function(df) {
 # general internal function to perform the specified function by chromsome arm for a sample
 by_arm <- function(df, f, ...) {
   df_a <- split(df, df$arm) # split the input data frame by arm
-  df_out <- lapply(df_a, f, ...) # apply the specified function to each arm
+  df_out <- mclapply(df_a, f, mc.cores = detectCores(), ...) # apply the specified function to each arm
   do.call("rbind", df_out) # provide the result as a data frame
 }
 
 # internal wrapper function to get all corrected BOC values for every segment in each sample in a data frame
 correct_for_boc <- function(df) {
   df_sam <- split(df, df$sample) # split the input file by sample
-  df_sam <- lapply(df_sam, by_arm, get_missing_cov) # correct BOC by arm in each sample
+  df_sam <- mclapply(df_sam, by_arm, get_missing_cov, mc.cores = detectCores()) # correct BOC by arm in each sample
   df_out <- do.call("rbind", df_sam) # provide the result as a data frame
   df_out %>% mutate(cyto_len_corr = cyto_len - missing_cov) # compute the corrected arm length
 }
@@ -141,7 +142,7 @@ correct_for_boc <- function(df) {
 # internal wrapper function to make all aSCNA calls for every sample in a data frame
 make_all_calls <- function(df, thresh) {
   df_sam <- split(df, df$sample) # split the input file by sample
-  df_sam <- lapply(df_sam, by_arm, make_arm_call, thresh) # make calls for each arm in each sample
+  df_sam <- mclapply(df_sam, by_arm, make_arm_call, thresh, mc.cores = detectCores()) # make calls for each arm in each sample
   calls <- do.call("rbind", df_sam) # provide the result as a data frame
   calls <- calls %>% mutate(CALL = as.character(CALL)) %>% replace_na(list(CALL = "NC"))
   calls %>% group_by(sample) %>% spread(ARM, CALL, fill = "LOWCOV") %>% ungroup() # turn the output into a matrix
@@ -162,11 +163,11 @@ compute_noise <- function(df) {
 # internal function to compute the noise for every segment in a sample
 noise_by_segment <- function(df.seg, df.log) {
   # calculate the noise for every segment in the data frame
-  n <- lapply(1:nrow(df.seg),
-              function(x) compute_noise(df.log %>%
-                                          filter(chrom == df.seg$chrom[x],
-                                                 start >= df.seg$segment_start[x],
-                                                 end <= df.seg$segment_end[x])))
+    n <- mclapply(1:nrow(df.seg),
+                function(x) compute_noise(df.log %>%
+                                            filter(chrom == df.seg$chrom[x],
+                                                   start >= df.seg$segment_start[x],
+                                                   end <= df.seg$segment_end[x])), mc.cores = detectCores())
   
   cbind(df.seg, noise = unlist(n)) # return the result
 }
@@ -174,8 +175,9 @@ noise_by_segment <- function(df.seg, df.log) {
 # internal function to compute the noise for every sample in a file
 noise_by_sample <- function(df.seg, df.log) {
   # calculate the noise for every sample in the data frame
-  m <- lapply(unique(df.seg$sample), function(x) noise_by_segment(df.seg %>% filter(sample == !!x),
-                                                              df.log %>% filter(sample == !!x)))
+    m <- mclapply(unique(df.seg$sample), function(x) noise_by_segment(df.seg %>% filter(sample == !!x),
+                                                                    df.log %>% filter(sample == !!x)), mc.cores = detectCores())
+
   do.call("bind_rows", m) # return the result
 }
 

@@ -3,7 +3,7 @@
 
 _Copyright (C) 2020 Dana-Farber Cancer Institute_
 
-Author: Liam F. Spurr, liam.spurr@uchospitals.edu
+Author: Liam F. Spurr, liam.spurr@uchicagomedicine.org
 
 Contact: Rameen Beroukhim, rameen_beroukhim@dfci.harvard.edu
 
@@ -34,7 +34,7 @@ Required:
 	- Specify 0.0 to allow any BOC
 - Output file prefix
 
-Optional (recommended):
+Optional:
 - Arm level-alteration fraction threshold
 	- Defaults to 0.7
 - Individual log2 ratio copy ratios (LCRs) that were used to build copy-number segments
