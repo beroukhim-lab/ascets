@@ -1,10 +1,10 @@
 ### ASCETS: Arm-level Somatic Copy-number Events in Targeted Sequencing
-### v1.0
+### v1.1.2
 ### ascets_resources.R
 
-### Author: Liam F. Spurr, liam.spurr@uchospitals.edu
+### Author: Liam F. Spurr, liam.spurr@uchicagomedicine.edu
 ### Contact: Rameen Beroukhim, rameen_beroukhim@dfci.harvard.edu
-### Date last updated: October 15, 2020
+### Date last updated: January 12, 2023
 
 ### License: GNU GPL2, Copyright (C) 2020 Dana-Farber Cancer Institute
 ### Dependencies: R >= 3.4.0, Libraries: tidyverse, data.table
