@@ -260,7 +260,8 @@ compute_alt_fractions <- function(cna, amp_thresh, del_thresh, min_boc) {
     ungroup() %>%
     mutate(alt_frac = alt_len_sum / cyto_len_corr) %>%  # calculate the fraction
     dplyr::select(sample, arm, alt, perc_chrom_cov, cov_pass, alt_frac) %>%
-    distinct()
+    distinct() %>%
+    mutate(alt_frac = ifelse(is.na(alt_frac), 0, alt_frac))
 }
 
 calc_aneu_scores <- function(calls) {
