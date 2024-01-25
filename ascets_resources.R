@@ -85,6 +85,12 @@ make_arm_call <- function(df, thresh) {
   max_alt_type <- df[df$alt_frac == max_alt,]$alt
   
   # assign call based on alteration threshold
+  if(length(max_alt_type) > 1 & ("DEL" %in% max_alt_type & "AMP" %in% max_alt_type)) { # edge case where two types affect exactly the same fraction of an arm
+    return(data.frame(sample = as.character(df$sample[1]), ARM = as.character(df$arm[1]), CALL = "NC"))
+  } else if (length(max_alt_type) > 1) {
+    max_alt_type <- max_alt_type[max_alt_type != "NEUTRAL"]
+  }
+  
   if(max_alt_type == "NEUTRAL") {
     if(max_alt >= thresh) call <- max_alt_type
     else call <- "NC"
