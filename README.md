@@ -29,6 +29,7 @@ Required:
 	- See sample data for an example file
 - Chromosome arm genomic coordinates
 	- We supply an example file in the repository for hg19 (original data from [UCSC](http://hgdownload.cse.ucsc.edu/goldenPath/hg19/database/cytoBand.txt.gz)), but other coordinates can be supplied in the same format such as cytoband coordinates (also provided for hg19)
+  - Ensure the columns "arm", "chrom", "start", and "end" are present if supplying your own file. "Arm" can be used to represent the name of any range of bases (ex. chr 9, 9p, 9p21, etc).
 - Minimum arm breadth of coverage (BOC) to make a call (range 0.0 - 1.0)
 	- Optional, defaults to 0.5
 	- Specify 0.0 to allow any BOC

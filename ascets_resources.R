@@ -113,8 +113,8 @@ get_missing_cov <- function(df) {
   tot = 0
 
   # check BOC on the ends of the arm
-  if((df[1,3] - df[1,9]) > 0) {tot = tot + (df[1,3] - df[1,9])} # calculate the length from the end of the arm to the first measured base
-  if((df[1,10] - df[nrow(df),4]) > 0) {tot = tot + (df[1,10] - df[nrow(df),4])} # calculate the length from the last measured base to the end of the arm
+  if((df$segment_start[1] - df$start[1]) > 0) {tot = tot + (df$segment_start[1] - df$start[1])} # calculate the length from the end of the arm to the first measured base
+  if((df$end[1] - df$segment_end[nrow(df)]) > 0) {tot = tot + (df$end[1] - df$segment_end[nrow(df)])} # calculate the length from the last measured base to the end of the arm
   # iterate through middle segments to identify areas outside BOC
   if(nrow(df) > 1) {
     for (i in 2:nrow(df)) {
