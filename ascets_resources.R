@@ -118,7 +118,7 @@ get_missing_cov <- function(df) {
   # iterate through middle segments to identify areas outside BOC
   if(nrow(df) > 1) {
     for (i in 2:nrow(df)) {
-      diff = df[i,3] - df[i-1,4] # check BOC between consecutive segments
+      diff = diff = df$segment_start[i] - df$segment_end[i-1] # check BOC between consecutive segments
       if (diff > 1) {
         tot = tot + diff # add to the total BOC
       }
